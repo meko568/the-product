@@ -91,6 +91,7 @@ plus.onclick = function () {
             document.querySelector(".check").remove()
         }
     }
+    document.querySelector(".num").innerHTML = num.innerHTML
 }
 minus.onclick = function () {
     if (num.innerHTML === "1") {
@@ -128,6 +129,7 @@ minus.onclick = function () {
             document.querySelector(".check").remove()
         }
     }
+    document.querySelector(".num").innerHTML = num.innerHTML
 }
 add.parentElement.onclick = function () {
     num.innerHTML = +num.innerHTML + 1;
@@ -160,6 +162,7 @@ add.parentElement.onclick = function () {
             document.querySelector(".check").remove()
         }
     }
+    document.querySelector(".num").innerHTML = num.innerHTML
 }
 document.querySelector(".menu").onclick = function () {
     document.querySelector(".links").style.display = "flex";
