@@ -1,175 +1,334 @@
-let plus = document.querySelector(".plus");
-let minus = document.querySelector(".minus");
-let num = document.querySelector(".p-m span");
-let add = document.querySelector(".add span")
-let images = document.querySelectorAll(".images img")
-let next = document.createElement("img");
-let back = document.createElement("img");
-let remove = document.createElement("img");
-remove.src = "images/icon-close.svg";
-remove.className = "remove";
-let check = document.querySelector(".theimg");
-let cart = document.querySelector(".sel");
-let the = document.querySelector(".sel div:nth-child(2)")
-check.onclick = function () {
-    cart.classList.toggle("dis");
-}
-images.forEach(function (e) {
-    e.onclick = function () {
-        const scale = document.createElement("div");
-        next.className = "next button";
-        next.src = "images/icon-next.svg"
-        back.className = "back button";
-        back.src = "images/icon-next.svg"
-        if (e.parentElement.classList[0] === "images") {
-            scale.innerHTML = e.parentElement.innerHTML
-        } else {
-            scale.innerHTML = e.parentElement.parentElement.innerHTML
-        }
-        scale.appendChild(next)
-        scale.appendChild(remove)
-        scale.appendChild(back)
-        scale.classList.add("scale");
-        document.body.appendChild(scale)
-        scale.children[0].src = e.src
-        scale.children[0].dataset.num = e.dataset.num;
-        document.querySelector(".main").classList.add("toscale")
-    }
-})
-next.onclick = function () {
-    let the = +document.querySelector(".scale img").dataset.num;
-    if (the === 3) {
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize quantity
+    let quantity = 0;
+    
+    // DOM Elements
+    const menuBtn = document.querySelector('.menu');
+    const closeMenuBtn = document.querySelector('.close-menu');
+    const navLinks = document.querySelector('.links');
+    const cartIcon = document.querySelector('.cart-icon');
+    const cartDropdown = document.querySelector('.cart-dropdown');
+    const mainImage = document.querySelector('.main-image');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const minusBtn = document.querySelector('.quantity-btn.minus');
+    const plusBtn = document.querySelector('.quantity-btn.plus');
+    const quantityDisplay = document.querySelector('.quantity');
+    const addToCartBtn = document.querySelector('.add-to-cart');
+    const cartCount = document.querySelector('.cart-count');
+    const cartContent = document.querySelector('.cart-content');
+    const lightbox = document.querySelector('.lightbox');
+    const lightboxImg = document.querySelector('.lightbox-content img');
+    const closeLightbox = document.querySelector('.close-lightbox');
+    const nextBtn = document.querySelector('.next');
+    const prevBtn = document.querySelector('.prev');
 
-    } else {
-        document.querySelector(".scale img").dataset.num = the + 1;
-        document.querySelector(".scale img").src = document.querySelector(`.scale .img-${the + 1}`).src;
-    }
-}
-back.onclick = function () {
-    let the = +document.querySelector(".scale img").dataset.num;
-    if (the === 0) {
+    // Mobile Menu Toggle
+    menuBtn && menuBtn.addEventListener('click', () => {
+        navLinks.classList.add('active');
+        document.body.classList.add('menu-open');
+    });
 
-    } else {
-        document.querySelector(".scale img").dataset.num = the - 1;
-        document.querySelector(".scale img").src = document.querySelector(`.scale .img-${the - 1}`).src;
-    }
-}
-remove.onclick = function () {
-    remove.parentElement.remove()
-    document.querySelector(".main").classList.remove("toscale")
-}
+    closeMenuBtn && closeMenuBtn.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        document.body.classList.remove('menu-open');
+    });
 
-plus.onclick = function () {
-    num.innerHTML = +num.innerHTML + 1
-    minus.classList.remove("min0");
-    add.innerHTML = "Added To cart";
-    add.parentElement.classList.add("added")
-    if (num.innerHTML === "0") {
-        the.innerHTML = "your cart is empty"
-        if (document.querySelector(".check")) {
-            document.querySelector(".check").remove()
-        }
-    } else {
-        if (cart.children.length !== 3) {
-            let btn = document.createElement("button");
-            btn.className = "check";
-            btn.innerHTML = "checkout";
-            cart.appendChild(btn);
-        }
-        the.innerHTML = `    <img src="images/image-product-1-thumbnail.jpg">
-    <div class="info">
-        <div class="disc">
-            <p>Fall Limited Edition Sneaker</p>
-        </div>
-        <div class="price"><span>$125.00</span>x $<span>${num.innerHTML}</span>    <span>$${+num.innerHTML * 125}.00</span></div>
-    </div>
-    <img src="images/icon-delete.svg" class="del">`;
-        document.querySelector(".del").onclick = function () {
-            console.log(this)
-            num.innerHTML = 0;
-            the.innerHTML = "your cart is empty"
-            document.querySelector(".check").remove()
-        }
-    }
-    document.querySelector(".num").innerHTML = num.innerHTML
-}
-minus.onclick = function () {
-    if (num.innerHTML === "1") {
-        add.innerHTML = "Add To cart"
-        add.parentElement.classList.remove("added")
-        minus.classList.add("min0")
-    } else {
-        add.parentElement.classList.add("added")
-    }
-    num.innerHTML = +num.innerHTML - 1;
-    if (num.innerHTML === "0") {
-        the.innerHTML = "your cart is empty";
-        if (document.querySelector(".check")) {
-            document.querySelector(".check").remove()
-        }
-    } else {
-        if (cart.children.length !== 3) {
-            let btn = document.createElement("button");
-            btn.className = "check";
-            btn.innerHTML = "checkout";
-            cart.appendChild(btn);
-        }
-        the.innerHTML = `    <img src="images/image-product-1-thumbnail.jpg">
-    <div class="info">
-        <div class="disc">
-            <p>Fall Limited Edition Sneaker</p>
-        </div>
-        <div class="price"><span>$125.00</span>x $<span>${num.innerHTML}</span> <span>${+num.innerHTML * 125}</span>.00</div>
-    </div>
-    <img src="images/icon-delete.svg" class="del">`
-        document.querySelector(".del").onclick = function () {
-            console.log(this)
-            num.innerHTML = 0;
-            the.innerHTML = "your cart is empty"
-            document.querySelector(".check").remove()
-        }
-    }
-    document.querySelector(".num").innerHTML = num.innerHTML
-}
-add.parentElement.onclick = function () {
-    num.innerHTML = +num.innerHTML + 1;
-    add.parentElement.classList.add("added");
-    minus.classList.remove("min0");
-    add.innerHTML = "Added To cart";
-    if (num.innerHTML === "0") {
-        the.innerHTML = "your cart is empty";
-        if (document.querySelector(".check")) {
-            document.querySelector(".check").remove()
-        }
-    } else {
-        if (cart.children.length !== 3) {
-            let btn = document.createElement("button");
-            btn.className = "check";
-            btn.innerHTML = "checkout";
-            cart.appendChild(btn);
-        }
-        the.innerHTML = `    <img src="images/image-product-1-thumbnail.jpg">
-    <div class="info">
-        <div class="disc">
-            <p>Fall Limited Edition Sneaker</p>
-        </div>
-        <div class="price"><span>$125.00</span>x $<span>${num.innerHTML}</span> <span>${+num.innerHTML * 125}</span>.00</div>
-    </div>
-    <img src="images/icon-delete.svg" class="del">`
-        document.querySelector(".del").onclick = function () {
-            num.innerHTML = 0;
-            the.innerHTML = "your cart is empty"
-            document.querySelector(".check").remove()
-        }
-    }
-    document.querySelector(".num").innerHTML = num.innerHTML
-}
-document.querySelector(".menu").onclick = function () {
-    document.querySelector(".links").style.display = "flex";
-    document.querySelector(".box").classList.add("toscale")
-}
-document.querySelector(".dele").onclick = function () {
-    document.querySelector(".links").style.display = "none"
-    document.querySelector(".box").classList.remove("toscale")
+    // Cart Toggle
+    cartIcon && cartIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        cartDropdown.classList.toggle('active');
+    });
 
-}
+    // Close cart when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.cart-icon') && !e.target.closest('.cart-dropdown')) {
+            cartDropdown.classList.remove('active');
+        }
+    });
+
+    // Image Gallery
+    let currentImageIndex = 0;
+    const imageSources = [
+        'images/image-product-1.jpg',
+        'images/image-product-2.jpg',
+        'images/image-product-3.jpg',
+        'images/image-product-4.jpg'
+    ];
+
+    function updateMainImage(index) {
+        mainImage.src = imageSources[index];
+        thumbnails.forEach((thumb, i) => {
+            if (i === index) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
+        });
+        currentImageIndex = index;
+    }
+
+    // Thumbnail click handler
+    thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener('click', () => {
+            updateMainImage(index);
+        });
+    });
+
+    // Lightbox functionality
+    if (mainImage && lightbox && lightboxImg) {
+        mainImage.addEventListener('click', () => {
+            lightbox.style.display = 'flex';
+            lightboxImg.src = imageSources[currentImageIndex];
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (closeLightbox && lightbox) {
+        closeLightbox.addEventListener('click', () => {
+            lightbox.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+    }
+
+    // Close lightbox when clicking outside the image
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
+
+    // Next/Previous image navigation
+    function showNextImage() {
+        const nextIndex = (currentImageIndex + 1) % imageSources.length;
+        updateMainImage(nextIndex);
+        if (lightbox.style.display === 'flex') {
+            lightboxImg.src = imageSources[nextIndex];
+        }
+    }
+
+    function showPrevImage() {
+        const prevIndex = (currentImageIndex - 1 + imageSources.length) % imageSources.length;
+        updateMainImage(prevIndex);
+        if (lightbox.style.display === 'flex') {
+            lightboxImg.src = imageSources[prevIndex];
+        }
+    }
+
+    // Navigation buttons
+    nextBtn && nextBtn.addEventListener('click', showNextImage);
+    prevBtn && prevBtn.addEventListener('click', showPrevImage);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (lightbox && lightbox.style.display === 'flex') {
+            if (e.key === 'ArrowRight') {
+                showNextImage();
+            } else if (e.key === 'ArrowLeft') {
+                showPrevImage();
+            } else if (e.key === 'Escape') {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    });
+
+    // Quantity Selector
+    function updateQuantityDisplay() {
+        if (quantity < 0) quantity = 0; // Ensure quantity is never negative
+        if (quantityDisplay) {
+            quantityDisplay.textContent = quantity;
+            console.log('Quantity updated to:', quantity);
+        }
+    }
+
+    // Quantity button event listeners
+    if (minusBtn) {
+        minusBtn.style.pointerEvents = 'auto';
+        minusBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (quantity > 0) {
+                quantity--;
+                cartCount.innerHTML = quantity;
+                const totalPrice = (125 * quantity).toFixed(2);
+                cartContent.innerHTML = `
+                <div class="cart-header">Cart</div>
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <img src="images/image-product-1-thumbnail.jpg" alt="Fall Limited Edition Sneakers" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <p>Fall Limited Edition Sneakers</p>
+                            <p>$125.00 x ${quantity} <span class="cart-item-total">$${totalPrice}</span></p>
+                        </div>
+                        <button class="delete-item">
+                            <img src="images/icon-delete.svg" alt="Remove">
+                        </button>
+                    </div>
+                    <button class="checkout-btn">Checkout</button>
+                </div>`;
+                updateQuantityDisplay();
+                
+                // Reset add to cart button when quantity reaches 0
+                if (quantity === 0 && addToCartBtn) {
+                    addToCartBtn.textContent = 'Add to Cart';
+                    addToCartBtn.style.pointerEvents = 'auto';
+                    addToCartBtn.style.opacity = '1';
+                }
+            }
+        });
+    }
+
+    if (plusBtn) {
+        plusBtn.style.pointerEvents = 'auto';
+        plusBtn.addEventListener('click', (e) => {
+            addToCartBtn.textContent = 'Added to Cart';
+            addToCartBtn.style.pointerEvents = 'none';
+            addToCartBtn.style.opacity = '.7';
+            e.preventDefault();
+            quantity++;
+            cartCount.innerHTML = quantity;
+            const totalPrice = (125 * quantity).toFixed(2);
+            cartContent.innerHTML = `
+            <div class="cart-header">Cart</div>
+            <div class="cart-items">
+                <div class="cart-item">
+                    <img src="images/image-product-1-thumbnail.jpg" alt="Fall Limited Edition Sneakers" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <p>Fall Limited Edition Sneakers</p>
+                        <p>$125.00 x ${quantity} <span class="cart-item-total">$${totalPrice}</span></p>
+                    </div>
+                    <button class="delete-item">
+                        <img src="images/icon-delete.svg" alt="Remove">
+                    </button>
+                </div>
+                <button class="checkout-btn">Checkout</button>
+            </div>`;    
+            updateQuantityDisplay();
+        });
+    }
+
+    // Function to disable quantity controls
+    function disableQuantityControls(disable = true) {
+        if (plusBtn) plusBtn.style.pointerEvents = disable ? 'none' : 'auto';
+        if (minusBtn) minusBtn.style.pointerEvents = disable ? 'none' : 'auto';
+        if (quantityDisplay) quantityDisplay.style.opacity = disable ? '0.5' : '1';
+    }
+
+    // Add to Cart
+    addToCartBtn && addToCartBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Add to cart clicked');
+        
+        // Get the current display quantity
+        const displayQty = parseInt(quantityDisplay.textContent) || 0;
+        const qtyToAdd = displayQty > 0 ? displayQty : 1;
+        
+        console.log('Adding to cart with quantity:', qtyToAdd);
+        
+        // Ensure cart count element exists
+        if (!cartCount) {
+            console.error('Cart count element not found');
+            return;
+        }
+        
+        // Update cart count and reset quantity display
+        const currentCount = parseInt(cartCount.textContent || '0');
+        const newQuantity = currentCount + qtyToAdd;
+        cartCount.textContent = newQuantity;
+        cartCount.style.display = 'flex';
+        
+        // Set quantity display to 1 after adding to cart
+        quantity = 1;
+        quantityDisplay.textContent = '1';
+        
+        console.log('Updated cart count to:', newQuantity, 'Display quantity set to 1');
+        
+        // Disable controls during animation
+        disableQuantityControls(true);
+        
+        // Save original button state
+        const originalHTML = addToCartBtn.innerHTML;
+        const originalText = addToCartBtn.textContent;
+        
+        // Update button to show added state
+        addToCartBtn.style.pointerEvents = 'none';
+        addToCartBtn.style.opacity = '0.7';
+        addToCartBtn.textContent = 'Added to Cart';
+        
+        // Reset add to cart button after 2 seconds
+        setTimeout(() => {
+            if (addToCartBtn) {
+                addToCartBtn.style.pointerEvents = 'auto';
+                addToCartBtn.style.opacity = '1';
+                addToCartBtn.textContent = "Add to Cart";
+            }
+        }, 2000);
+        cartCount.innerHTML = quantity;
+        // Update cart content
+        cartContent.innerHTML = `
+            <div class="cart-header">Cart</div>
+            <div class="cart-items">
+                <div class="cart-item">
+                    <img src="images/image-product-1-thumbnail.jpg" alt="Fall Limited Edition Sneakers" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <p>Fall Limited Edition Sneakers</p>
+                        <p>$125.00 x 1 <span class="cart-item-total">$125</span></p>
+                    </div>
+                    <button class="delete-item">
+                        <img src="images/icon-delete.svg" alt="Remove">
+                    </button>
+                </div>
+                <button class="checkout-btn">Checkout</button>
+            </div>`;
+
+        // Add delete functionality
+        const deleteBtn = cartContent.querySelector('.delete-item');
+        deleteBtn && deleteBtn.addEventListener('click', () => {
+            cartCount.style.display = 'none';
+            cartCount.textContent = '0';
+            cartContent.innerHTML = '<p>Your cart is empty</p>';
+            console.log('Cart cleared');
+        });
+
+        // Add checkout functionality
+        const checkoutBtn = cartContent.querySelector('.checkout-btn');
+        checkoutBtn && checkoutBtn.addEventListener('click', () => {
+            console.log('Proceeding to checkout');
+            // Add your checkout logic here
+            alert('Proceeding to checkout!');
+        });
+
+        // Re-enable after 2 seconds
+        setTimeout(() => {
+            addToCartBtn.style.pointerEvents = 'none';
+            addToCartBtn.style.opacity = '.7';
+            addToCartBtn.textContent = "Added to Cart";
+            disableQuantityControls(false);
+        }, 2000);
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.cart-dropdown') && !e.target.closest('.cart-icon')) {
+            cartDropdown && cartDropdown.classList.remove('active');
+        }
+    });
+
+    // Handle keyboard navigation for menu
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (navLinks) navLinks.classList.remove('active');
+            if (cartDropdown) cartDropdown.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            
+            // Close lightbox if open
+            const lightbox = document.querySelector('.lightbox');
+            if (lightbox && window.getComputedStyle(lightbox).display === 'flex') {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    });
+});
